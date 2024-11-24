@@ -1,7 +1,71 @@
-select current_user()
+add index ix_nome (DKZZIN)
+select current_user(DKZZIN)
 
 explain select * from cliente 
            where nome = 'João Silva'
            
 alter table cliente
   add index ix_nome (nome)
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Fluent " .. Fluent.Version,
+    TabWidth = 160, Size = UDim2.fromOffset(580, 460), Theme = "Ocean"
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+Tabs.Main:AddParagraph({ Title = "Paragraph", Content = "This is a paragraph.\nSecond line!" })
+
+Tabs.Main:AddButton({ Title = "Button", Callback = function() ... end })
+
+
+-- Função para adicionar setas para localizar jogadores
+function addArrows()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            local arrow = Instance.new("BillboardGui", player.Character.Head)
+            arrow.Size = UDim2.new(1, 0, 1, 0)
+            arrow.AlwaysOnTop = true
+            local frame = Instance.new("Frame", arrow)
+            frame.Size = UDim2.new(1, 0, 1, 0)
+            frame.BackgroundColor3 = Color3.new(1, 0, 0) -- Cor vermelha para os jogadores
+        end
+    end
+end
+
+-- Função para destacar o xerife em verde
+function highlightSheriff()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Backpack:FindFirstChild("Gun") or player.Character:FindFirstChild("Gun") then
+            player.Character.Head.BrickColor = BrickColor.new("Bright green")
+        end
+    end
+end
+
+-- Função para destacar o assassino em azul
+function highlightMurderer()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife") then
+            player.Character.Head.BrickColor = BrickColor.new("Bright blue")
+        end
+    end
+end
+
+-- Função para pegar a arma do xerife automaticamente
+function autoGrabGun()
+    game.Workspace.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") and child.Name == "Gun" then
+            game.Players.LocalPlayer.Character.Humanoid:EquipTool(child)
+        end
+    end)
+end
+
+-- Chamando as funções
+addArrows()
+highlightSheriff()
+highlightMurderer()
+autoGrabGun()
